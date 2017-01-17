@@ -7,6 +7,7 @@ use glium::DisplayBuild;
 use glium::glutin::Event;
 use glium::glutin::ElementState::Pressed;
 use glium::glutin::VirtualKeyCode;
+use std::time::Instant;
 
 
 #[derive(Copy, Clone)] // Some random thing to define the struct to do stuff? i think?
@@ -70,6 +71,8 @@ fn main() {
   let shaders = glium::Program::from_source(&display, vertex_shader, fragment_shader, None).unwrap();
   
   loop {
+    //start timer for delta time
+    let start = Instant::now();
     // Them helpful poll things ya know
     for ev in display.poll_events() {
       match ev {
@@ -108,5 +111,7 @@ fn main() {
     
     // Draw them things on the render
     draw(&display, &shaders);
+    //get elapsed time!
+    let elapsed = start.elapsed();
   }
 }
