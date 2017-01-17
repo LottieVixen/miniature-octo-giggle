@@ -1,4 +1,4 @@
 # TrucksAndDriving
-[![Build Status](https://travis-ci.com/foxsan48/TrucksAndDriving.png?branch=master)]
+[![Build Status](https://travis-ci.com/foxsan48/TrucksAndDriving.svg?branch=master)](https://travis-ci.org/foxsan48/Piston-TrucksAndDriving)
 
 umm no trucks were harmed in the making of this game

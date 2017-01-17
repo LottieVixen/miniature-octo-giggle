@@ -4,6 +4,10 @@ extern crate glium;
 
 use glium::Surface;
 use glium::DisplayBuild;
+use glium::glutin::Event;
+use glium::glutin::ElementState::Pressed;
+use glium::glutin::VirtualKeyCode;
+
 
 #[derive(Copy, Clone)] // Some random thing to define the struct to do stuff? i think?
 struct Vertex {
@@ -14,6 +18,10 @@ implement_vertex!(Vertex, position);
 
 fn triangle() -> Vec<Vertex> {
   vec![Vertex { position: [-0.5, -0.5] }, Vertex { position: [ 0.0,  0.5] }, Vertex { position: [ 0.5, -0.25] }]
+}
+
+fn keyboard() {
+
 }
 
 // That useful drawing function
@@ -65,9 +73,38 @@ fn main() {
     // Them helpful poll things ya know
     for ev in display.poll_events() {
       match ev {
-        glium::glutin::Event::Closed => return, _ => ()
+        Event::KeyboardInput(Pressed, any, Some(VirtualKeyCode::W)) => {
+          println!("P: W");
+        },
+        Event::KeyboardInput(Pressed, any, Some(VirtualKeyCode::S)) => {
+          println!("P: S");
+        },
+        Event::KeyboardInput(Pressed, any, Some(VirtualKeyCode::D)) => {
+          println!("P: D");
+        },
+        Event::KeyboardInput(Pressed, any, Some(VirtualKeyCode::A)) => {
+          println!("P: A");
+        },
+        
+        Event::KeyboardInput(Released, any, Some(VirtualKeyCode::W)) => {
+          println!("R: W");
+        },
+        Event::KeyboardInput(Released, any, Some(VirtualKeyCode::S)) => {
+          println!("R: S");
+        },
+        Event::KeyboardInput(Released, any, Some(VirtualKeyCode::D)) => {
+          println!("R: D");
+        },
+        Event::KeyboardInput(Released, any, Some(VirtualKeyCode::A)) => {
+          println!("R: A");
+        },
+        Event::KeyboardInput(Pressed, any, Some(VirtualKeyCode::Escape)) => {
+          return;
+        },
+        glium::glutin::Event::Closed => return, _ => (),      
       }
     }
+    keyboard();
     
     // Draw them things on the render
     draw(&display, &shaders);
