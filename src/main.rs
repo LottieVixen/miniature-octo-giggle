@@ -18,6 +18,7 @@ struct Vertex {
 implement_vertex!(Vertex, position);
 
 struct Object {
+  name: String,
   position: [f32; 2],
   colour: [f32; 3],
   width: f32,
@@ -27,7 +28,7 @@ struct Object {
 
 impl Object {
   pub fn new() -> Object {
-    Object { position: [0.0, 0.0], colour: [0.509, 0.098, 0.819], width: 0.5, height: 0.5, velocity: [0.1,  0.1] }
+    Object { name: String::from("Type"), position: [0.0, 0.0], colour: [0.509, 0.098, 0.819], width: 0.5, height: 0.5, velocity: [0.1,  0.1] }
   }
   
   pub fn get_velocity(&self) -> [f32; 2] {
@@ -50,6 +51,10 @@ impl Object {
     self.height
   }
   
+  pub fn set_name(&mut self, name: String) {
+    self.name = name;
+  }
+  
   pub fn change_x(&mut self, diff: f32) {
     self.position[0] += diff;
   }
@@ -70,7 +75,7 @@ fn triangle() -> Vec<Vertex> {
   vec![Vertex { position: [-0.25, -0.25] }, Vertex { position: [ 0.25,  -0.25] }, Vertex { position: [ 0.25, 0.25] }]
 }
 
-fn keyboard(key_pressed: [bool; 255], dt: f32,  truck: &mut Object) {  
+fn keyboard(key_pressed: [bool; 255], dt: f32, objects: &mut [Object; 1]) {  
   let w = 25;
   let a = 38;
   let s = 39;
@@ -78,34 +83,34 @@ fn keyboard(key_pressed: [bool; 255], dt: f32,  truck: &mut Object) {
   //let esc = 9;
   
   if key_pressed[w] == true {
-    let vely = truck.get_velocity()[1] *dt as f32;
-    truck.change_y(vely);
+    let vely = objects[0].get_velocity()[1] *dt as f32;
+    objects[0].change_y(vely);
   }
   
   if key_pressed[a] == true {
-    let velx = truck.get_velocity()[0] *dt as f32;
-    truck.change_x(-velx);
+    let velx = objects[0].get_velocity()[0] *dt as f32;
+    objects[0].change_x(-velx);
   }
   
   if key_pressed[s] == true {
-    let vely = truck.get_velocity()[1] *dt as f32;
-    truck.change_y(-vely);
+    let vely = objects[0].get_velocity()[1] *dt as f32;
+    objects[0].change_y(-vely);
   }
   
   if key_pressed[d] == true {
-    let velx = truck.get_velocity()[0] *dt as f32;
-    truck.change_x(velx);
+    let velx = objects[0].get_velocity()[0] *dt as f32;
+    objects[0].change_x(velx);
   }
 }
 
 // That useful drawing function
-fn draw(display: &glium::backend::glutin_backend::GlutinFacade, shaders: &glium::Program, truck: &Object) {
+fn draw(display: &glium::backend::glutin_backend::GlutinFacade, shaders: &glium::Program, objects: &[Object; 1]) {
   let mut render = display.draw();
   
   // Set render background colour
   render.clear_color(0.0, 0.0, 1.0, 1.0);
   
-  let vertex_buffer = glium::VertexBuffer::new(display, &square(truck.get_position()[0], truck.get_position()[1], truck.get_width(), truck.get_height())).unwrap();
+  let vertex_buffer = glium::VertexBuffer::new(display, &square(objects[0].get_position()[0], objects[0].get_position()[1], objects[0].get_width(), objects[0].get_height())).unwrap();
   let indices = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
   
   render.draw(&vertex_buffer, &indices, &shaders, &glium::uniforms::EmptyUniforms, &Default::default()).unwrap();
@@ -124,7 +129,9 @@ fn main() {
   
   let mut key_pressed: [bool; 255] = [false; 255];
   
-  let mut truck = Object::new();// { name: "Truck", position: [0.0, 0.0], colour: [0.509, 0.098, 0.819], width: 0.5, height: 0.5, velocity: [0.0,  0.0] };
+  let mut objects: [Object; 1] = [Object::new()];
+  
+  objects[0].set_name(String::from("Truck"));
   
   //start timer for delta time
   let mut last_time = Instant::now();
@@ -149,10 +156,10 @@ fn main() {
       }
     }
     
-    keyboard(key_pressed, delta_time, &mut truck);
+    keyboard(key_pressed, delta_time, &mut objects);
     
     // Draw them things on the render
-    draw(&display, &shaders, &truck);
+    draw(&display, &shaders, &objects);
 
   }
 }
