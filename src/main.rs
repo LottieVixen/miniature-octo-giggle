@@ -117,31 +117,10 @@ fn draw(display: &glium::backend::glutin_backend::GlutinFacade, shaders: &glium:
 fn main() {
   println!("Hello, world!");
   
-  // Them Shaders
-  let vertex_shader = r#"
-    #version 140
-    
-    in vec2 position;
-    
-    void main() {
-      gl_Position = vec4(position, 0.0, 1.0);
-    }
-  "#;
-
-  let fragment_shader = r#"
-    #version 140
-    
-    out vec4 color;
-    
-    void main() {
-      color = vec4(0.509, 0.098, 0.819, 1.0);
-    }
-  "#;
-  
-  let display = glium::glutin::WindowBuilder::new().with_dimensions(800, 600).
+  let display = glium::glutin::WindowBuilder::new().with_dimensions(1024, 768).
                                                     with_title(format!("TrucksTrucksandMoreTrucks")).
                                                     build_glium().unwrap();
-  let shaders = glium::Program::from_source(&display, vertex_shader, fragment_shader, None).unwrap();
+  let shaders = glium::Program::from_source(&display, include_str!("shader.vs"), include_str!("shader.frag"), None).unwrap();
   
   let mut key_pressed: [bool; 255] = [false; 255];
   
