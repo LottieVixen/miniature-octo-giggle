@@ -5,3 +5,4 @@ authors = ["Lilith645 <lilith@inet-sys.com>"]
 
 [dependencies]
 glium = "*"
+glutin = "*"
