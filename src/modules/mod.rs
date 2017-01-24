@@ -8,8 +8,8 @@ pub struct Object {
 }
 
 impl Object {
-  pub fn new() -> Object {
-    Object { name: String::from("Type"), position: [0.0, 0.0], colour: [0.509, 0.098, 0.819], width: 0.5, height: 0.5, velocity: [0.1,  0.1] }
+  pub fn new(name:String) -> Object {
+    Object { name: String::from(name), position: [0.0, 0.0], colour: [0.509, 0.098, 0.819], width: 0.5, height: 0.5, velocity: [0.1,  0.1] }
   }
   
   pub fn get_velocity(&self) -> [f32; 2] {
@@ -42,5 +42,23 @@ impl Object {
 
   pub fn change_y(&mut self, diff: f32) {
     self.position[1] += diff;
+  }
+}
+
+pub struct Truck {
+  info: Object,
+  front_wheel: bool,
+  back_wheel: bool,
+  four_wheel: bool
+}
+
+impl Truck {
+  pub fn new() -> Truck {
+    Truck { info: Object::new(String::from("Truck")), front_wheel: true, back_wheel: false, four_wheel: false }
+  }
+  
+  
+  pub fn get_object(&self) -> &Object {
+    &self.info
   }
 }

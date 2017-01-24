@@ -33,7 +33,7 @@ fn triangle() -> Vec<Vertex> {
   vec![Vertex { position: [-0.25, -0.25] }, Vertex { position: [ 0.25,  -0.25] }, Vertex { position: [ 0.25, 0.25] }]
 }
 
-fn keyboard(key_pressed: [bool; 255], dt: f32, objects: &mut [Object; 1]) {  
+fn keyboard(key_pressed: [bool; 255], dt: f32, object_info: &mut Vec<Object>) {  
   let w = 25;
   let a = 38;
   let s = 39;
@@ -41,34 +41,34 @@ fn keyboard(key_pressed: [bool; 255], dt: f32, objects: &mut [Object; 1]) {
   //let esc = 9;
   
   if key_pressed[w] == true {
-    let vely = objects[0].get_velocity()[1] *dt as f32;
-    objects[0].change_y(vely);
+    let vely = object_info[0].get_velocity()[1] *dt as f32;
+    object_info[0].change_y(vely);
   }
   
   if key_pressed[a] == true {
-    let velx = objects[0].get_velocity()[0] *dt as f32;
-    objects[0].change_x(-velx);
+    let velx = object_info[0].get_velocity()[0] *dt as f32;
+    object_info[0].change_x(-velx);
   }
   
   if key_pressed[s] == true {
-    let vely = objects[0].get_velocity()[1] *dt as f32;
-    objects[0].change_y(-vely);
+    let vely = object_info[0].get_velocity()[1] *dt as f32;
+    object_info[0].change_y(-vely);
   }
   
   if key_pressed[d] == true {
-    let velx = objects[0].get_velocity()[0] *dt as f32;
-    objects[0].change_x(velx);
+    let velx = object_info[0].get_velocity()[0] *dt as f32;
+    object_info[0].change_x(velx);
   }
 }
 
 // That useful drawing function
-fn draw(display: &glium::backend::glutin_backend::GlutinFacade, shaders: &glium::Program, objects: &[Object; 1]) {
+fn draw(display: &glium::backend::glutin_backend::GlutinFacade, shaders: &glium::Program, object_info: &Vec<Object>) {
   let mut render = display.draw();
   
   // Set render background colour
   render.clear_color(0.0, 0.0, 1.0, 1.0);
   
-  let vertex_buffer = glium::VertexBuffer::new(display, &square(objects[0].get_position()[0], objects[0].get_position()[1], objects[0].get_width(), objects[0].get_height())).unwrap();
+  let vertex_buffer = glium::VertexBuffer::new(display, &square(object_info[0].get_position()[0], object_info[0].get_position()[1], object_info[0].get_width(), object_info[0].get_height())).unwrap();
   let indices = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
   
   render.draw(&vertex_buffer, &indices, &shaders, &glium::uniforms::EmptyUniforms, &Default::default()).unwrap();
@@ -87,9 +87,8 @@ fn main() {
   
   let mut key_pressed: [bool; 255] = [false; 255];
   
-  let mut objects: [Object; 1] = [Object::new()];
-  
-  objects[0].set_name(String::from("Truck"));
+  let mut object_info = Vec::new();
+  object_info.push(Object::new(String::from("Truck")));
   
   //start timer for delta time
   let mut last_time = Instant::now();
@@ -114,10 +113,10 @@ fn main() {
       }
     }
     
-    keyboard(key_pressed, delta_time, &mut objects);
+    keyboard(key_pressed, delta_time, &mut object_info);
     
     // Draw them things on the render
-    draw(&display, &shaders, &objects);
+    draw(&display, &shaders, &object_info);
 
   }
 }
