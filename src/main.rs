@@ -1,12 +1,12 @@
 #[macro_use]
 
-extern crate glium;
-extern crate glutin;
+extern crate glium;  //import glium
+extern crate glutin; //import glutin
 
-mod modules;
+mod modules; //import module from modules dir
 
-use modules::Object;
-use std::time::Instant;
+use modules::Object; //select parts from modules/libs to add to namespace directly
+use std::time::Instant;// this makes using parts of mods easier
 use glium::Surface;
 use glium::DisplayBuild;
 use glium::glutin::Event;
@@ -14,8 +14,8 @@ use glium::glutin::ElementState;
 //use glium::glutin::VirtualKeyCode;
 
 #[derive(Copy, Clone)] // Some random thing to define the struct to do stuff? i think?
-struct Vertex {
-  position: [f32; 2],
+struct Vertex {        //make a struct "Vertex", define a data type! :D
+  position: [f32; 2],  //2 item array with f32 type, default to 0
 }
 
 implement_vertex!(Vertex, position);
@@ -25,8 +25,10 @@ implement_vertex!(Vertex, position);
 fn square(x: f32, y: f32, width: f32, height: f32) -> Vec<Vertex> {
   let w = width/2.0;
   let h = height/2.0;
-  vec![Vertex { position: [x-w, y-h] }, Vertex { position: [ x+w,  y-h] }, Vertex { position: [ x+w, y+h] },
-       Vertex { position: [x-w, y-h] }, Vertex { position: [ x-w,  y+h] }, Vertex { position: [ x+w, y+h] } ]
+  vec![Vertex { position: [x-w, y-h] }, Vertex { position: [ x+w,  y-h] },
+       Vertex { position: [ x+w, y+h] }, //first 3 vecs
+       Vertex { position: [x-w, y-h] }, Vertex { position: [ x-w,  y+h] }, 
+       Vertex { position: [ x+w, y+h] } ] //last 3 vecs
 }
 
 fn triangle() -> Vec<Vertex> {
