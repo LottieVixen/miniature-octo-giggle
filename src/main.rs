@@ -5,7 +5,9 @@ extern crate glutin;
 
 mod modules;
 
+use modules::Truck;
 use modules::Object;
+
 use std::time::Instant;
 use glium::Surface;
 use glium::DisplayBuild;
@@ -34,31 +36,7 @@ fn triangle() -> Vec<Vertex> {
 }
 
 fn keyboard(key_pressed: [bool; 255], dt: f32, object_info: &mut Vec<Object>) {  
-  let w = 25;
-  let a = 38;
-  let s = 39;
-  let d = 40;
-  //let esc = 9;
-  
-  if key_pressed[w] == true {
-    let vely = object_info[0].get_velocity()[1] *dt as f32;
-    object_info[0].change_y(vely);
-  }
-  
-  if key_pressed[a] == true {
-    let velx = object_info[0].get_velocity()[0] *dt as f32;
-    object_info[0].change_x(-velx);
-  }
-  
-  if key_pressed[s] == true {
-    let vely = object_info[0].get_velocity()[1] *dt as f32;
-    object_info[0].change_y(-vely);
-  }
-  
-  if key_pressed[d] == true {
-    let velx = object_info[0].get_velocity()[0] *dt as f32;
-    object_info[0].change_x(velx);
-  }
+
 }
 
 // That useful drawing function
@@ -87,8 +65,7 @@ fn main() {
   
   let mut key_pressed: [bool; 255] = [false; 255];
   
-  let mut object_info = Vec::new();
-  object_info.push(Object::new(String::from("Truck")));
+  let mut truck = Truck::new();
   
   //start timer for delta time
   let mut last_time = Instant::now();
@@ -113,10 +90,39 @@ fn main() {
       }
     }
     
-    keyboard(key_pressed, delta_time, &mut object_info);
+    let mut object_info = Vec::new();
+    object_info.push(Object::new(String::from("")));
+    object_info[0].clone(truck.get_object());
+    
+    // keyboard(key_pressed, delta_time, &mut object_info);
+    
+    let w = 25;
+    let a = 38;
+    let s = 39;
+    let d = 40;
+    //let esc = 9;
+    
+    if key_pressed[w] == true {
+      let vely = truck.get_velocity()[1] *delta_time as f32;
+      truck.add_y(vely);
+    }
+  
+    if key_pressed[a] == true {
+      let velx = truck.get_velocity()[0] *delta_time as f32;
+       truck.add_x(-velx);
+    }
+   
+    if key_pressed[s] == true {
+      let vely = truck.get_velocity()[1] *delta_time as f32;
+      truck.add_y(-vely);
+    }
+    
+    if key_pressed[d] == true {
+      let velx = truck.get_velocity()[0] *delta_time as f32;
+      truck.add_x(velx);
+    }
     
     // Draw them things on the render
     draw(&display, &shaders, &object_info);
-
   }
 }
