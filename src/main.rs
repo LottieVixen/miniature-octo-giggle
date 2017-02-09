@@ -56,7 +56,6 @@ fn draw(display: &glium::backend::glutin_backend::GlutinFacade, shaders: &glium:
 }
 
 fn main() {
-  println!("Hello, world!");
   
   let display = glium::glutin::WindowBuilder::new().with_dimensions(1024, 768).
                                                     with_title(format!("TrucksTrucksandMoreTrucks")).
@@ -80,21 +79,15 @@ fn main() {
       match ev {
         Event::KeyboardInput(ElementState::Pressed, scan_code, _) => {
           key_pressed[scan_code as usize] = true;
-          println!("P: {}", scan_code);
+          //println!("P: {}", scan_code);
         },
         Event::KeyboardInput(ElementState::Released, scan_code, _) => {
           key_pressed[scan_code as usize] = false;
-          println!("R: {}", scan_code);
+          //println!("R: {}", scan_code);
         },
         glium::glutin::Event::Closed => return, _ => (),      
       }
     }
-    
-    let mut object_info = Vec::new();
-    object_info.push(Object::new(String::from("")));
-    object_info[0].clone(truck.get_object());
-    
-    // keyboard(key_pressed, delta_time, &mut object_info);
     
     let w = 25;
     let a = 38;
@@ -102,26 +95,30 @@ fn main() {
     let d = 40;
     //let esc = 9;
     
+    // Check Key presses
     if key_pressed[w] == true {
-      let vely = truck.get_velocity()[1] *delta_time as f32;
-      truck.add_y(vely);
+      truck.accelerate(delta_time);
     }
   
     if key_pressed[a] == true {
-      let velx = truck.get_velocity()[0] *delta_time as f32;
-       truck.add_x(-velx);
+       truck.rotate_front_wheel(-2.0);
     }
    
     if key_pressed[s] == true {
-      let vely = truck.get_velocity()[1] *delta_time as f32;
-      truck.add_y(-vely);
+      truck.decelerate(delta_time);
     }
     
     if key_pressed[d] == true {
-      let velx = truck.get_velocity()[0] *delta_time as f32;
-      truck.add_x(velx);
+      truck.rotate_front_wheel(2.0);
     }
     
+    // Update
+    truck.update(delta_time);
+    
+    // Get Info from Objects
+    let mut object_info = Vec::new();
+    object_info.push(Object::new(String::from("")));
+    object_info[0].clone(truck.get_object());
     // Draw them things on the render
     draw(&display, &shaders, &object_info);
   }
