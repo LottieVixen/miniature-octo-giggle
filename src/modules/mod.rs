@@ -30,6 +30,10 @@ impl Object {
     Object { name: String::from(name), position: [0.0, 0.0], colour: (0.509, 0.098, 0.819), width: 0.5, height: 0.5 }
   }
   
+  pub fn new_size(name:String, width: f32, height: f32) -> Object {
+    Object { name: String::from(name), position: [0.0, 0.0], colour: (0.509, 0.098, 0.819), width: width, height: height }
+  }
+  
   pub fn clone(&mut self, copy: &Object) {
     self.name = String::from(copy.get_name());
     self.position = copy.get_position();
@@ -56,6 +60,14 @@ impl Object {
   
   pub fn get_height(&self) -> f32 {
     self.height
+  }
+  
+  pub fn set_width(&mut self, width: f32) {
+    self.width = width;
+  }
+  
+  pub fn set_height(&mut self, height: f32) {
+    self.height = height;
   }
   
   pub fn set_name(&mut self, name: String) {
@@ -89,7 +101,7 @@ impl Wheel {
 
 impl Truck {
   pub fn new() -> Truck {
-    Truck { info: Object::new(String::from("Truck")), velocity: [0.1,  0.1], acceleration: 0.0, speed: 0.0, max_speed: 0.0005, max_reverse_speed: -0.0001, front_wheel: Wheel::new(0.0, 45.0), back_wheel: Wheel::new(0.0, 0.0) }
+    Truck { info: Object::new_size(String::from("Truck"), 0.1, 0.3), velocity: [0.1,  0.1], acceleration: 0.0, speed: 0.0, max_speed: 0.0005, max_reverse_speed: -0.0001, front_wheel: Wheel::new(0.0, 45.0), back_wheel: Wheel::new(0.0, 0.0) }
   }
   
   pub fn get_object(&self) -> &Object {
